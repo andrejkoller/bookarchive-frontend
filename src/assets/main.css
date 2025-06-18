@@ -1,3 +1,23 @@
+@font-face {
+  font-family: 'LoraRegular';
+  src: url('../fonts/lora/Lora-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LoraBold';
+  src: url('../fonts/lora/Lora-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LoraMedium';
+  src: url('../fonts/lora/Lora-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'LoraSemiBold';
+  src: url('../fonts/lora/Lora-SemiBold.ttf') format('truetype');
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #ffecbd;
