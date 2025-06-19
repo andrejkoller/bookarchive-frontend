@@ -7,9 +7,10 @@ import {
   sortBooksByCreationDate,
   filterBooksByFormat,
   filterBooksByLanguage,
+  searchBooks,
 } from '@/services/bookService'
 import { onMounted, ref } from 'vue'
-import { VBtn } from 'vuetify/components'
+import { VBtn, VTextField } from 'vuetify/components'
 import { ArrowUp, ArrowDown, ArrowRight } from 'lucide-vue-next'
 
 const books = ref<Book[]>([])
@@ -68,6 +69,17 @@ const toggleSortDirection = () => {
   handleSortBooksByCreationDate(isAscending.value)
 }
 
+const handleSearchBooks = async (event: InputEvent) => {
+  const target = event.target as HTMLInputElement
+  const query = target.value.trim()
+  try {
+    const searchResults = await searchBooks(query)
+    books.value = searchResults
+  } catch (error) {
+    console.error('Error searching books:', error)
+  }
+}
+
 const formatString = (str: string): string => {
   return str.replace(/([a-z])([A-Z])/g, '$1 $2')
 }
@@ -88,6 +100,15 @@ const formatString = (str: string): string => {
               <ArrowDown />
             </div>
           </v-btn>
+        </div>
+        <div class="search-container">
+          <v-text-field
+            label="Search books"
+            placeholder="Search by title or author"
+            variant="solo-filled"
+            @keyup.enter="handleSearchBooks"
+            class="search-input"
+          />
         </div>
       </div>
       <div class="archive-body">
@@ -182,6 +203,7 @@ const formatString = (str: string): string => {
 .filter-container {
   display: flex;
   gap: 32px;
+  width: 100%;
 }
 
 .filter-container button {
@@ -194,6 +216,13 @@ const formatString = (str: string): string => {
   height: auto;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .sort-wrapper {

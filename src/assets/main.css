@@ -25,3 +25,36 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.v-text-field input {
+  font-family: 'LoraRegular', Arial, sans-serif;
+  font-size: 16px;
+  color: #266152;
+  background-color: transparent;
+  border: 1px solid #266152 !important;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.v-field--variant-solo-filled .v-field__overlay {
+  background-color: #ffecbd !important;
+}
+
+.v-field--variant-solo,
+.v-field--variant-solo-filled {
+  box-shadow: none !important;
+  border: 1px solid #266152 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  color: #266152 !important;
+}
+
+.v-field--variant-solo,
+.v-field--variant-solo-filled:focus-within {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.v-text-field .v-input__details {
+  display: none;
+}

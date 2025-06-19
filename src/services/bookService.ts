@@ -75,3 +75,15 @@ export const sortBooksByCreationDate = async (ascending: boolean): Promise<Book[
     throw error
   }
 }
+
+export const searchBooks = async (query: string): Promise<Book[]> => {
+  try {
+    const response = await api.get('/books/search', {
+      params: { query },
+    })
+    return response.data
+  } catch (error) {
+    console.error(`Error searching books with query "${query}":`, error)
+    throw error
+  }
+}
