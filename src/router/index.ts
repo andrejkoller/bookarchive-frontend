@@ -17,7 +17,7 @@ const router = createRouter({
       component: ArchiveView,
     },
     {
-      path: '/archive/book/:id',
+      path: '/archive/books/:id',
       name: 'book',
       component: BookView,
     },
