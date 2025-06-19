@@ -1,4 +1,4 @@
-import type { Book, BookGenre } from '@/models/Book'
+import type { Book, BookFormat, BookGenre, BookLanguage } from '@/models/Book'
 import axios from 'axios'
 
 const api = axios.create({
@@ -28,7 +28,7 @@ export const getBookById = async (id: string): Promise<Book> => {
   }
 }
 
-export const filterBooks = async (genre: BookGenre): Promise<Book[]> => {
+export const filterBooksByGenre = async (genre: BookGenre): Promise<Book[]> => {
   try {
     const response = await api.get('/books/bygenre', {
       params: { genre },
@@ -40,7 +40,31 @@ export const filterBooks = async (genre: BookGenre): Promise<Book[]> => {
   }
 }
 
-export const sortBooks = async (ascending: boolean): Promise<Book[]> => {
+export const filterBooksByFormat = async (format: BookFormat): Promise<Book[]> => {
+  try {
+    const response = await api.get('/books/byformat', {
+      params: { format },
+    })
+    return response.data
+  } catch (error) {
+    console.error(`Error filtering books by format ${format}:`, error)
+    throw error
+  }
+}
+
+export const filterBooksByLanguage = async (language: BookLanguage): Promise<Book[]> => {
+  try {
+    const response = await api.get('/books/bylanguage', {
+      params: { language },
+    })
+    return response.data
+  } catch (error) {
+    console.error(`Error filtering books by language ${language}:`, error)
+    throw error
+  }
+}
+
+export const sortBooksByCreationDate = async (ascending: boolean): Promise<Book[]> => {
   try {
     const response = await api.get('/books/sort', {
       params: { ascending },

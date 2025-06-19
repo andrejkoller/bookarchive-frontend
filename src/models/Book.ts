@@ -15,20 +15,20 @@ export interface Book {
 
 export enum BookGenre {
   Fiction = 'Fiction',
-  NonFiction = 'Non-Fiction',
+  NonFiction = 'NonFiction',
   Mystery = 'Mystery',
-  ScienceFiction = 'Science Fiction',
+  ScienceFiction = 'ScienceFiction',
   Fantasy = 'Fantasy',
   Biography = 'Biography',
   History = 'History',
   Romance = 'Romance',
   Thriller = 'Thriller',
   Horror = 'Horror',
-  SelfHelp = 'Self-Help',
+  SelfHelp = 'SelfHelp',
   Children = 'Children',
   YoungAdult = 'Young Adult',
   Dystopian = 'Dystopian',
-  PoliticalSatire = 'Political Satire',
+  PoliticalSatire = 'PoliticalSatire',
 }
 
 export enum BookFormat {

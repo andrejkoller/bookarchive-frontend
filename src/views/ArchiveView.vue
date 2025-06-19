@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import type { Book, BookGenre } from '@/models/Book'
-import { filterBooks, getBooks, sortBooks } from '@/services/bookService'
+import type { Book } from '@/models/Book'
+import { BookFormat, BookGenre, BookLanguage } from '@/models/Book'
+import {
+  getBooks,
+  filterBooksByGenre,
+  sortBooksByCreationDate,
+  filterBooksByFormat,
+  filterBooksByLanguage,
+} from '@/services/bookService'
 import { onMounted, ref } from 'vue'
 import { VBtn } from 'vuetify/components'
-import { ArrowUp } from 'lucide-vue-next'
-import { ArrowDown } from 'lucide-vue-next'
+import { ArrowUp, ArrowDown, ArrowRight } from 'lucide-vue-next'
 
 const books = ref<Book[]>([])
 const isAscending = ref(true)
@@ -18,18 +24,39 @@ onMounted(async () => {
   }
 })
 
-const filterBooksByGenre = async (genre: BookGenre) => {
+const handleFilterBooksByGenre = async (genre: BookGenre) => {
+  console.log('Filtering books by genre:', genre)
   try {
-    const filteredBooks = await filterBooks(genre)
+    const filteredBooks = await filterBooksByGenre(genre)
     books.value = filteredBooks
   } catch (error) {
     console.error('Error filtering books:', error)
   }
 }
 
-const sortBooksByCreationDate = async (ascending: boolean) => {
+const handleFilterBooksByFormat = async (format: BookFormat) => {
+  console.log('Filtering books by format:', format)
   try {
-    const sortedBooks = await sortBooks(ascending)
+    const filteredBooks = await filterBooksByFormat(format)
+    books.value = filteredBooks
+  } catch (error) {
+    console.error('Error filtering books:', error)
+  }
+}
+
+const handleFilterBooksByLanguage = async (language: BookLanguage) => {
+  console.log('Filtering books by language:', language)
+  try {
+    const filteredBooks = await filterBooksByLanguage(language)
+    books.value = filteredBooks
+  } catch (error) {
+    console.error('Error filtering books:', error)
+  }
+}
+
+const handleSortBooksByCreationDate = async (ascending: boolean) => {
+  try {
+    const sortedBooks = await sortBooksByCreationDate(ascending)
     books.value = sortedBooks
   } catch (error) {
     console.error('Error sorting books:', error)
@@ -38,7 +65,7 @@ const sortBooksByCreationDate = async (ascending: boolean) => {
 
 const toggleSortDirection = () => {
   isAscending.value = !isAscending.value
-  sortBooksByCreationDate(isAscending.value)
+  handleSortBooksByCreationDate(isAscending.value)
 }
 
 const formatString = (str: string): string => {
@@ -64,15 +91,43 @@ const formatString = (str: string): string => {
         </div>
       </div>
       <div class="archive-body">
-        <div class="filter-list">
-          <span
-            v-for="book in books"
-            :key="book.id"
-            @click="filterBooksByGenre(book.genre)"
-            class="filter-item"
-          >
-            {{ formatString(book.genre) }}
-          </span>
+        <div class="filters">
+          <div class="genre">
+            <h3>Genre</h3>
+            <div class="genre-buttons">
+              <v-btn
+                v-for="genre in Object.values(BookGenre)"
+                :key="genre"
+                @click="handleFilterBooksByGenre(genre)"
+              >
+                {{ formatString(genre) }}
+              </v-btn>
+            </div>
+          </div>
+          <div class="format">
+            <h3>Format</h3>
+            <div class="format-buttons">
+              <v-btn
+                v-for="format in Object.values(BookFormat)"
+                :key="format"
+                @click="handleFilterBooksByFormat(format)"
+              >
+                {{ formatString(format) }}
+              </v-btn>
+            </div>
+          </div>
+          <div class="language">
+            <h3>Language</h3>
+            <div class="language-buttons">
+              <v-btn
+                v-for="language in Object.values(BookLanguage)"
+                :key="language"
+                @click="handleFilterBooksByLanguage(language)"
+              >
+                {{ formatString(language) }}
+              </v-btn>
+            </div>
+          </div>
         </div>
         <div class="book-list">
           <div v-for="book in books" :key="book.id" class="book-item">
@@ -86,7 +141,10 @@ const formatString = (str: string): string => {
               </div>
             </div>
             <div class="book-link">
-              <v-btn variant="outlined" :to="{ path: '/archive/books/' + book.id }">Info</v-btn>
+              <v-btn variant="outlined" :to="{ path: '/archive/books/' + book.id }">
+                <span>Info</span>
+                <ArrowRight />
+              </v-btn>
             </div>
           </div>
         </div>
@@ -164,20 +222,93 @@ const formatString = (str: string): string => {
   width: 100%;
 }
 
-.filter-list {
+.filters {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 16px;
   width: 25%;
   margin-top: 32px;
+  position: sticky;
+  top: 0;
 }
 
-.filter-list span {
-  font-size: 24px;
+.genre {
+  display: flex;
+  flex-direction: c;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.genre-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.genre button {
+  text-decoration: none;
+  background-color: transparent;
+  box-shadow: none;
+  color: #266152;
+  font-size: 18px;
   font-weight: 400;
-  font-family: 'LoraRegular', serif;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.format {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.format-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.format button {
+  text-decoration: none;
+  background-color: transparent;
+  box-shadow: none;
+  color: #266152;
+  font-size: 18px;
+  font-weight: 400;
+  padding: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.language {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.language-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.language button {
+  text-decoration: none;
+  background-color: transparent;
+  box-shadow: none;
+  color: #266152;
+  font-size: 18px;
+  font-weight: 400;
+  padding: 0;
+  border-radius: 0;
   cursor: pointer;
 }
 

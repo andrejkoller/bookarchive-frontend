@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { VBtn } from 'vuetify/components'
+import { ArrowRight } from 'lucide-vue-next'
 </script>
 
 <template>
@@ -42,7 +43,10 @@ import { VBtn } from 'vuetify/components'
           </p>
         </div>
         <div class="about-button">
-          <v-btn variant="outlined" href="/archive"> Go to Archive </v-btn>
+          <v-btn variant="outlined" href="/archive">
+            <span>Explore Archive</span>
+            <ArrowRight class="icon" />
+          </v-btn>
         </div>
       </div>
     </div>
@@ -137,8 +141,7 @@ import { VBtn } from 'vuetify/components'
   padding: 8px 16px;
 }
 
-.about-button a:hover {
-  background-color: #ffecbd !important;
-  color: #266152 !important;
+.icon {
+  margin-left: 8px;
 }
 </style>
