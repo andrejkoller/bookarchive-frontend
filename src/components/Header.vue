@@ -7,10 +7,13 @@ export default {
 <template>
   <div class="header">
     <h1>
+      <span class="text">Library Management System</span>
+    </h1>
+    <p>
       <a href="/">
         <span class="text">Book Archive</span>
       </a>
-    </h1>
+    </p>
   </div>
 </template>
 
@@ -18,18 +21,27 @@ export default {
 .header {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 16px 32px;
 }
 
 .header h1 {
   margin: 0;
   font-size: 32px;
+  font-family: 'LoraRegular', serif;
+  font-weight: 400;
+  font-style: italic;
+  color: #266152;
+}
+
+.header p {
+  margin: 0;
+  font-size: 32px;
   text-transform: uppercase;
   font-weight: 400;
 }
 
-.header h1 a {
+.header p a {
   text-decoration: none;
   color: #266152;
 }

@@ -65,9 +65,11 @@ import { VBtn } from 'vuetify/components'
   width: 100%;
 }
 
-.home-title {
-  font-size: 2rem;
+.home-title h1 {
+  font-size: 4rem;
   font-family: 'LoraRegular', serif;
+  font-weight: 400;
+  font-style: italic;
 }
 
 .home-body {
@@ -82,6 +84,7 @@ import { VBtn } from 'vuetify/components'
   font-size: 6rem;
   margin: 0;
   text-transform: uppercase;
+  font-weight: 400;
 }
 
 .about {
