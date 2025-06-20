@@ -28,6 +28,43 @@ export const getBookById = async (id: string): Promise<Book> => {
   }
 }
 
+export const createBook = async (formData: FormData): Promise<Book> => {
+  try {
+    const response = await api.post('/books/add', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error creating book:', error)
+    throw error
+  }
+}
+
+export const deleteBookById = async (id: number): Promise<void> => {
+  try {
+    await api.delete(`/books/${id}`)
+  } catch (error) {
+    console.error(`Error deleting book with id ${id}:`, error)
+    throw error
+  }
+}
+
+export const updateBookById = async (id: number, formData: FormData): Promise<Book> => {
+  try {
+    const response = await api.put(`/books/update/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error(`Error updating book with id ${id}:`, error)
+    throw error
+  }
+}
+
 export const filterBooksByGenre = async (genre: BookGenre): Promise<Book[]> => {
   try {
     const response = await api.get('/books/bygenre', {

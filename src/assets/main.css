@@ -33,7 +33,7 @@ body {
   background-color: transparent;
   border: 1px solid #266152 !important;
   border-radius: 4px;
-  padding: 10px;
+  padding: 4px 16px;
 }
 
 .v-field--variant-solo-filled .v-field__overlay {
@@ -57,4 +57,18 @@ body {
 
 .v-text-field .v-input__details {
   display: none;
+}
+
+.v-label.v-field-label {
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+.v-input__prepend {
+  display: none !important;
+}
+
+.v-input--density-default .v-field__input {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }

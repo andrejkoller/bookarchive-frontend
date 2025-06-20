@@ -1,6 +1,19 @@
 <script setup lang="ts">
 import { VBtn } from 'vuetify/components'
 import { ArrowRight } from 'lucide-vue-next'
+import { onMounted, ref } from 'vue'
+import { getBooks } from '@/services/bookService'
+import type { Book } from '@/models/Book'
+
+const books = ref<Book[]>([])
+
+onMounted(async () => {
+  try {
+    books.value = await getBooks()
+  } catch (error) {
+    console.error('Error fetching books:', error)
+  }
+})
 </script>
 
 <template>
@@ -20,13 +33,14 @@ import { ArrowRight } from 'lucide-vue-next'
     <div class="about">
       <div class="about-header">
         <div class="about-images">
-          <img src="" alt="Book Cover" />
-          <img src="" alt="Book Cover" />
-          <img src="" alt="Book Cover" />
-          <img src="" alt="Book Cover" />
-          <img src="" alt="Book Cover" />
-          <img src="" alt="Book Cover" />
-          <img src="" alt="Book Cover" />
+          <img
+            v-for="book in books.slice(0, 6)"
+            :key="book.id"
+            :src="`https://localhost:7179/${book.previewImage}`"
+            alt="Book Cover"
+            class="about-image"
+            :style="books.length >= 6 ? 'width: 100%;' : 'width: auto;'"
+          />
         </div>
       </div>
       <div class="about-body">
@@ -96,7 +110,7 @@ import { ArrowRight } from 'lucide-vue-next'
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   background-color: #266152;
 }
@@ -110,8 +124,12 @@ import { ArrowRight } from 'lucide-vue-next'
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
+}
+
+.about-image {
+  height: 500px;
 }
 
 .about-body {
@@ -122,6 +140,7 @@ import { ArrowRight } from 'lucide-vue-next'
   height: 100%;
   gap: 6rem;
   padding: 0 44px;
+  margin-bottom: 120px;
 }
 
 .about-body p {

@@ -8,13 +8,36 @@ import {
   filterBooksByFormat,
   filterBooksByLanguage,
   searchBooks,
+  deleteBookById,
+  createBook,
 } from '@/services/bookService'
 import { onMounted, ref } from 'vue'
-import { VBtn, VTextField } from 'vuetify/components'
-import { ArrowUp, ArrowDown, ArrowRight } from 'lucide-vue-next'
+import { VBtn, VTextField, VDialog, VCard, VSelect, VFileInput } from 'vuetify/components'
+import { ArrowUp, ArrowDown, ArrowRight, Plus, Minus } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const books = ref<Book[]>([])
+const book = ref<Book>({
+  id: 0,
+  title: '',
+  author: '',
+  genre: BookGenre.Fiction,
+  yearPublished: 0,
+  pageCount: 0,
+  format: BookFormat.Hardcover,
+  language: BookLanguage.English,
+  summary: '',
+  note: '',
+  publisher: '',
+  previewImage: '',
+  file: undefined as File | undefined,
+  fileName: '',
+  filePath: '',
+})
 const isAscending = ref(true)
+const dialog = ref(false)
 
 onMounted(async () => {
   try {
@@ -25,8 +48,44 @@ onMounted(async () => {
   }
 })
 
+const handleAddBook = async (bookData: Book) => {
+  try {
+    const formData = new FormData()
+    formData.append('title', bookData.title)
+    formData.append('author', bookData.author)
+    formData.append('genre', bookData.genre)
+    formData.append('yearPublished', bookData.yearPublished.toString())
+    formData.append('pageCount', (bookData.pageCount || 0).toString())
+    formData.append('format', bookData.format ?? BookFormat.Hardcover)
+    formData.append('language', bookData.language ?? BookLanguage.English)
+    formData.append('summary', bookData.summary ?? '')
+    formData.append('note', bookData.note ?? '')
+    formData.append('publisher', bookData.publisher ?? '')
+
+    if (bookData.file) {
+      formData.append('file', bookData.file)
+      bookData.fileName = bookData.file.name
+      bookData.filePath = `/uploads/${bookData.file.name}`
+    }
+
+    const newBook = await createBook(formData)
+    books.value.push(newBook)
+    dialog.value = false
+  } catch (error) {
+    console.error('Error adding book:', error)
+  }
+}
+
+const handleDeleteBook = async (bookId: number) => {
+  try {
+    await deleteBookById(bookId)
+    books.value = books.value.filter((book) => book.id !== bookId)
+  } catch (error) {
+    console.error('Error deleting book:', error)
+  }
+}
+
 const handleFilterBooksByGenre = async (genre: BookGenre) => {
-  console.log('Filtering books by genre:', genre)
   try {
     const filteredBooks = await filterBooksByGenre(genre)
     books.value = filteredBooks
@@ -36,7 +95,6 @@ const handleFilterBooksByGenre = async (genre: BookGenre) => {
 }
 
 const handleFilterBooksByFormat = async (format: BookFormat) => {
-  console.log('Filtering books by format:', format)
   try {
     const filteredBooks = await filterBooksByFormat(format)
     books.value = filteredBooks
@@ -46,7 +104,6 @@ const handleFilterBooksByFormat = async (format: BookFormat) => {
 }
 
 const handleFilterBooksByLanguage = async (language: BookLanguage) => {
-  console.log('Filtering books by language:', language)
   try {
     const filteredBooks = await filterBooksByLanguage(language)
     books.value = filteredBooks
@@ -89,21 +146,31 @@ const formatString = (str: string): string => {
   <section>
     <div class="archive">
       <div class="archive-header">
-        <div class="filter-container">
-          <v-btn class="no-hover" @click="toggleSortDirection()" variant="outlined">
-            <div class="sort-wrapper" v-if="isAscending">
-              <div><span>Ascending</span> <span>Creation date</span></div>
-              <ArrowUp />
-            </div>
-            <div class="sort-wrapper" v-else>
-              <div><span>Descending</span> <span>Creation date</span></div>
-              <ArrowDown />
-            </div>
-          </v-btn>
+        <div class="wrapper">
+          <div class="filter-container">
+            <v-btn class="no-hover" @click="toggleSortDirection()" variant="outlined">
+              <div class="sort-wrapper" v-if="isAscending">
+                <div><span>Ascending</span> <span>Creation date</span></div>
+                <ArrowUp />
+              </div>
+              <div class="sort-wrapper" v-else>
+                <div><span>Descending</span> <span>Creation date</span></div>
+                <ArrowDown />
+              </div>
+            </v-btn>
+          </div>
+          <div class="add-container">
+            <v-btn variant="outlined">
+              <div class="add-wrapper" @click="dialog = true">
+                <div><span>Add Book</span> <span>New Entry</span></div>
+                <Plus />
+              </div>
+            </v-btn>
+          </div>
         </div>
         <div class="search-container">
           <v-text-field
-            label="Search books"
+            label="Search"
             placeholder="Search by title or author"
             variant="solo-filled"
             @keyup.enter="handleSearchBooks"
@@ -161,8 +228,12 @@ const formatString = (str: string): string => {
                 <p>{{ book.author }}</p>
               </div>
             </div>
-            <div class="book-link">
-              <v-btn variant="outlined" :to="{ path: '/archive/books/' + book.id }">
+            <div class="book-buttons">
+              <v-btn variant="outlined" @click="handleDeleteBook(book.id)">
+                <span>Remove</span>
+                <Minus />
+              </v-btn>
+              <v-btn variant="outlined" @click="router.push(`/archive/books/${book.id}`)">
                 <span>Info</span>
                 <ArrowRight />
               </v-btn>
@@ -172,6 +243,80 @@ const formatString = (str: string): string => {
       </div>
     </div>
   </section>
+
+  <v-dialog v-model="dialog" width="600px" height="100%" persistent>
+    <v-card class="dialog-content">
+      <form @submit.prevent="dialog = false" class="add-book-form">
+        <v-text-field label="Title" variant="underlined" v-model="book.title" required />
+        <v-text-field label="Author" variant="underlined" v-model="book.author" required />
+        <v-select
+          label="Genre"
+          variant="underlined"
+          :items="Object.values(BookGenre)"
+          v-model="book.genre"
+          required
+        />
+        <v-text-field
+          label="Year Published"
+          variant="underlined"
+          type="number"
+          v-model="book.yearPublished"
+          required
+        />
+        <v-text-field
+          label="Page Count"
+          variant="underlined"
+          type="number"
+          v-model="book.pageCount"
+          required
+        />
+        <v-select
+          label="Format"
+          variant="underlined"
+          :items="Object.values(BookFormat)"
+          v-model="book.format"
+          required
+        />
+        <v-select
+          label="Select language"
+          variant="underlined"
+          :items="Object.values(BookLanguage)"
+          v-model="book.language"
+          required
+        />
+        <v-text-field
+          label="Summary"
+          variant="underlined"
+          v-model="book.summary"
+          placeholder="A brief summary of the book"
+        />
+        <v-text-field
+          label="Note"
+          variant="underlined"
+          v-model="book.note"
+          placeholder="Any personal notes or thoughts"
+        />
+        <v-text-field
+          label="Publisher"
+          variant="underlined"
+          v-model="book.publisher"
+          placeholder="Publisher of the book"
+        />
+        <v-file-input
+          label="Upload Preview Image"
+          variant="underlined"
+          v-model="book.file"
+          accept=".pdf,.epub,.jpg,.jpeg,.png"
+          :show-size="true"
+          density="comfortable"
+        />
+        <div class="button-container">
+          <v-btn type="submit" @click="handleAddBook(book)">Add Book</v-btn>
+          <v-btn @click="dialog = false">Close</v-btn>
+        </div>
+      </form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped>
@@ -200,10 +345,16 @@ const formatString = (str: string): string => {
   border-bottom: 1px solid #266152;
 }
 
-.filter-container {
+.wrapper {
   display: flex;
+  justify-content: flex-start;
+  align-items: center;
   gap: 32px;
   width: 100%;
+}
+
+.filter-container {
+  display: flex;
 }
 
 .filter-container button {
@@ -216,6 +367,38 @@ const formatString = (str: string): string => {
   height: auto;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.add-container button {
+  border-radius: 0;
+  padding: 8px 16px;
+  font-size: 24px;
+  font-weight: 400;
+  background-color: #266152;
+  color: #ffecbd;
+  height: auto;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.add-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.add-wrapper div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.add-wrapper span:nth-child(2) {
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: none;
+  font-family: 'LoraRegular', serif;
 }
 
 .search-container {
@@ -355,7 +538,7 @@ const formatString = (str: string): string => {
   padding: 64px 16px 32px 0px;
 }
 
-.book-item:nth-child(2) {
+.book-item:nth-child(even) {
   color: #ffecbd;
   background-color: #266152;
 }
@@ -392,16 +575,56 @@ const formatString = (str: string): string => {
   font-family: 'LoraRegular', serif;
 }
 
-.book-link {
+.book-buttons {
   display: flex;
   justify-content: flex-end;
+  gap: 16px;
   width: 100%;
 }
 
-.book-link a {
+.book-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 18px;
   font-weight: 400;
   border-radius: 0;
   background-color: transparent;
+  color: inherit;
+  padding: 8px 16px;
+  border: 1px solid inherit;
+  cursor: pointer;
+}
+
+.dialog-content {
+  background-color: #266152;
+  color: #ffecbd;
+  border-radius: 0 !important;
+}
+
+.add-book-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+
+.button-container button {
+  width: 100%;
+  border-radius: 0;
+  background-color: #ffecbd;
+  color: #266152;
+  font-size: 18px;
+  font-weight: 400;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
 }
 </style>

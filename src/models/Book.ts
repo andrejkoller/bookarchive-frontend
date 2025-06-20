@@ -6,7 +6,10 @@ export interface Book {
   yearPublished: number
   summary: string
   note?: string
-  coverImageUrl?: string
+  file: File | undefined
+  fileName: string
+  filePath: string
+  previewImage?: string
   publisher?: string
   pageCount?: number
   format?: BookFormat
