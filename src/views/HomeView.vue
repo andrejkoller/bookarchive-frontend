@@ -4,8 +4,10 @@ import { ArrowRight } from 'lucide-vue-next'
 import { onMounted, ref } from 'vue'
 import { getBooks } from '@/services/bookService'
 import type { Book } from '@/models/Book'
+import { useRouter } from 'vue-router'
 
 const books = ref<Book[]>([])
+const router = useRouter()
 
 onMounted(async () => {
   try {
@@ -56,8 +58,8 @@ onMounted(async () => {
             archive turns a private collection into a meaningful and accessible archive.
           </p>
         </div>
-        <div class="about-button">
-          <v-btn variant="outlined" href="/archive">
+        <div class="button-container">
+          <v-btn variant="plain" class="archive-button" @click="router.push('/archive')">
             <span>Explore Archive</span>
             <ArrowRight class="icon" />
           </v-btn>
@@ -152,12 +154,22 @@ onMounted(async () => {
   text-align: left;
 }
 
-.about-button a {
+.archive-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
   border-radius: 0;
-  border-color: #ffecbd;
+  border: 1px solid #ffecbd;
   color: #ffecbd;
   font-size: 1.5rem;
-  padding: 8px 16px;
+  padding: 24px;
+  cursor: pointer;
+}
+
+.archive-button:hover {
+  background-color: #ffecbd;
+  color: #266152;
 }
 
 .icon {

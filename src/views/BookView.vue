@@ -93,10 +93,10 @@ const handleUpdateBook = async (bookData: Book) => {
           <p>{{ book?.publisher }}</p>
         </div>
         <div class="book-actions">
-          <v-btn variant="outlined" @click="$router.push('/archive')">
+          <v-btn class="button" variant="plain" @click="$router.push('/archive')">
             <span>Back</span>
           </v-btn>
-          <v-btn variant="outlined" @click="dialog = true">
+          <v-btn class="button" variant="plain" @click="dialog = true">
             <span>Edit</span>
           </v-btn>
         </div>
@@ -172,10 +172,15 @@ const handleUpdateBook = async (bookData: Book) => {
           density="comfortable"
         />
         <div class="button-container">
-          <v-btn type="submit" :disabled="!book" @click="book && handleUpdateBook(book)"
+          <v-btn
+            type="submit"
+            class="button"
+            variant="plain"
+            :disabled="!book"
+            @click="book && handleUpdateBook(book)"
             >Update Book</v-btn
           >
-          <v-btn @click="dialog = false">Close</v-btn>
+          <v-btn class="button" variant="plain" @click="dialog = false">Close</v-btn>
         </div>
       </form>
       <div class="loading-info" v-else>Loading book data...</div>
@@ -251,7 +256,7 @@ const handleUpdateBook = async (bookData: Book) => {
   gap: 16px;
 }
 
-.book-actions button {
+.book-actions .button {
   display: flex;
   align-items: center;
   font-size: 18px;
@@ -262,6 +267,11 @@ const handleUpdateBook = async (bookData: Book) => {
   border: 1px solid #266152;
   padding: 8px 16px;
   cursor: pointer;
+}
+
+.book-actions .button:hover {
+  background-color: #266152;
+  color: #ffecbd;
 }
 
 .dialog-content {
@@ -284,13 +294,13 @@ const handleUpdateBook = async (bookData: Book) => {
   gap: 16px;
 }
 
-.button-container button {
+.button-container .button {
   width: 100%;
   border-radius: 0;
-  background-color: #ffecbd;
-  color: #266152;
   font-size: 18px;
   font-weight: 400;
+  color: #266152;
+  background-color: #ffecbd;
   padding: 8px 16px;
   border: none;
   cursor: pointer;

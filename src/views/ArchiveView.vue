@@ -148,7 +148,7 @@ const formatString = (str: string): string => {
       <div class="archive-header">
         <div class="wrapper">
           <div class="filter-container">
-            <v-btn class="no-hover" @click="toggleSortDirection()" variant="outlined">
+            <v-btn class="button" @click="toggleSortDirection()" variant="plain">
               <div class="sort-wrapper" v-if="isAscending">
                 <div><span>Ascending</span> <span>Creation date</span></div>
                 <ArrowUp />
@@ -160,7 +160,7 @@ const formatString = (str: string): string => {
             </v-btn>
           </div>
           <div class="add-container">
-            <v-btn variant="outlined">
+            <v-btn variant="plain" class="button">
               <div class="add-wrapper" @click="dialog = true">
                 <div><span>Add Book</span> <span>New Entry</span></div>
                 <Plus />
@@ -184,6 +184,8 @@ const formatString = (str: string): string => {
             <h3>Genre</h3>
             <div class="genre-buttons">
               <v-btn
+                variant="plain"
+                class="button"
                 v-for="genre in Object.values(BookGenre)"
                 :key="genre"
                 @click="handleFilterBooksByGenre(genre)"
@@ -196,6 +198,8 @@ const formatString = (str: string): string => {
             <h3>Format</h3>
             <div class="format-buttons">
               <v-btn
+                variant="plain"
+                class="button"
                 v-for="format in Object.values(BookFormat)"
                 :key="format"
                 @click="handleFilterBooksByFormat(format)"
@@ -208,6 +212,8 @@ const formatString = (str: string): string => {
             <h3>Language</h3>
             <div class="language-buttons">
               <v-btn
+                variant="plain"
+                class="button"
                 v-for="language in Object.values(BookLanguage)"
                 :key="language"
                 @click="handleFilterBooksByLanguage(language)"
@@ -229,11 +235,15 @@ const formatString = (str: string): string => {
               </div>
             </div>
             <div class="book-buttons">
-              <v-btn variant="outlined" @click="handleDeleteBook(book.id)">
+              <v-btn variant="plain" class="button" @click="handleDeleteBook(book.id)">
                 <span>Remove</span>
                 <Minus />
               </v-btn>
-              <v-btn variant="outlined" @click="router.push(`/archive/books/${book.id}`)">
+              <v-btn
+                variant="plain"
+                class="button"
+                @click="router.push(`/archive/books/${book.id}`)"
+              >
                 <span>Info</span>
                 <ArrowRight />
               </v-btn>
@@ -311,8 +321,10 @@ const formatString = (str: string): string => {
           density="comfortable"
         />
         <div class="button-container">
-          <v-btn type="submit" @click="handleAddBook(book)">Add Book</v-btn>
-          <v-btn @click="dialog = false">Close</v-btn>
+          <v-btn type="submit" class="button" variant="plain" @click="handleAddBook(book)"
+            >Add Book</v-btn
+          >
+          <v-btn class="button" variant="plain" @click="dialog = false">Close</v-btn>
         </div>
       </form>
     </v-card>
@@ -357,7 +369,7 @@ const formatString = (str: string): string => {
   display: flex;
 }
 
-.filter-container button {
+.filter-container .button {
   border-radius: 0;
   padding: 8px 16px;
   font-size: 24px;
@@ -369,7 +381,7 @@ const formatString = (str: string): string => {
   text-decoration: underline;
 }
 
-.add-container button {
+.add-container .button {
   border-radius: 0;
   padding: 8px 16px;
   font-size: 24px;
@@ -472,6 +484,11 @@ const formatString = (str: string): string => {
   cursor: pointer;
 }
 
+.genre button:hover {
+  background-color: #266152;
+  color: #ffecbd;
+}
+
 .format {
   display: flex;
   flex-direction: column;
@@ -498,6 +515,11 @@ const formatString = (str: string): string => {
   cursor: pointer;
 }
 
+.format button:hover {
+  background-color: #266152;
+  color: #ffecbd;
+}
+
 .language {
   display: flex;
   flex-direction: column;
@@ -522,6 +544,11 @@ const formatString = (str: string): string => {
   padding: 0;
   border-radius: 0;
   cursor: pointer;
+}
+
+.language button:hover {
+  background-color: #266152;
+  color: #ffecbd;
 }
 
 .book-list {
@@ -582,7 +609,7 @@ const formatString = (str: string): string => {
   width: 100%;
 }
 
-.book-buttons button {
+.book-buttons .button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -592,8 +619,23 @@ const formatString = (str: string): string => {
   background-color: transparent;
   color: inherit;
   padding: 8px 16px;
-  border: 1px solid inherit;
+  border: 1px solid #266152;
   cursor: pointer;
+}
+
+.book-buttons .button:hover {
+  background-color: #266152;
+  color: #ffecbd;
+}
+
+.book-item:nth-child(even) .book-buttons .button {
+  color: #ffecbd;
+  border-color: #ffecbd;
+}
+
+.book-item:nth-child(even) .book-buttons .button:hover {
+  background-color: #ffecbd;
+  color: #266152;
 }
 
 .dialog-content {
@@ -616,15 +658,15 @@ const formatString = (str: string): string => {
   gap: 16px;
 }
 
-.button-container button {
+.button-container .button {
   width: 100%;
   border-radius: 0;
+  border: 1px solid #266152;
   background-color: #ffecbd;
   color: #266152;
   font-size: 18px;
   font-weight: 400;
   padding: 8px 16px;
-  border: none;
   cursor: pointer;
 }
 </style>
