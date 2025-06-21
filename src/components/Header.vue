@@ -45,4 +45,17 @@ export default {
   text-decoration: none;
   color: #266152;
 }
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header h1,
+  .header p {
+    font-size: 24px;
+    text-align: center;
+  }
+}
 </style>

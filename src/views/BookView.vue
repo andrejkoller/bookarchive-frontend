@@ -312,4 +312,102 @@ const handleUpdateBook = async (bookData: Book) => {
   text-align: center;
   padding: 16px;
 }
+
+@media (max-width: 1024px) {
+  .book-view {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .book-image img {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .book-header h1 {
+    font-size: 48px;
+  }
+
+  .book-header h2 {
+    font-size: 24px;
+  }
+
+  .book-details p {
+    font-size: 18px;
+  }
+
+  .book-actions .button {
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+
+  .dialog-content {
+    width: 100% !important;
+  }
+
+  .edit-book-form {
+    padding: 16px;
+  }
+
+  .button-container .button {
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+
+  .loading-info {
+    font-size: 20px;
+  }
+
+  .book-wrapper {
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .book-image {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .book-image img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 425px) {
+  .book-view {
+    padding: 0 16px;
+  }
+
+  .book-header h1 {
+    font-size: 36px;
+  }
+
+  .book-header h2 {
+    font-size: 20px;
+  }
+
+  .book-details p {
+    font-size: 16px;
+  }
+
+  .book-actions .button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .dialog-content {
+    width: 100%;
+  }
+
+  .edit-book-form {
+    padding: 8px;
+  }
+
+  .button-container .button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
 </style>

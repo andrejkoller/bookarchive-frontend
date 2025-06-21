@@ -669,4 +669,137 @@ const formatString = (str: string): string => {
   padding: 8px 16px;
   cursor: pointer;
 }
+
+@media (max-width: 1024px) {
+  .archive-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wrapper {
+    flex-direction: row;
+  }
+
+  .add-container {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .search-container {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .archive-body {
+    flex-direction: column;
+  }
+
+  .filters {
+    width: 100%;
+    margin-top: 0;
+    position: static;
+  }
+
+  .book-list {
+    width: 100%;
+  }
+
+  .book-item {
+    padding: 32px 16px;
+  }
+
+  .book-details h3 {
+    font-size: 32px;
+  }
+
+  .book-details p {
+    font-size: 24px;
+  }
+
+  .book-genre p {
+    font-size: 16px;
+  }
+
+  .book-buttons .button:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .archive-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .archive-body {
+    flex-direction: column;
+  }
+
+  .add-wrapper span {
+    font-size: 14px;
+  }
+
+  .sort-wrapper span {
+    font-size: 14px;
+  }
+
+  .add-wrapper span:nth-child(2) {
+    font-size: 12px;
+  }
+
+  .sort-wrapper span:nth-child(2) {
+    font-size: 12px;
+  }
+
+  .filters {
+    width: 100%;
+    margin-top: 0;
+    position: static;
+  }
+
+  .book-list {
+    width: 100%;
+  }
+
+  .book-item {
+    padding: 32px 16px;
+  }
+
+  .book-details h3 {
+    font-size: 24px;
+  }
+
+  .book-details p {
+    font-size: 20px;
+  }
+
+  .book-genre p {
+    font-size: 14px;
+  }
+
+  .book-buttons .button {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .button-container .button {
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+
+  .dialog-content {
+    width: 100%;
+    height: 100%;
+  }
+
+  .add-book-form {
+    padding: 8px;
+  }
+}
 </style>
